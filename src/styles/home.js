@@ -4,7 +4,7 @@ import constantsVals from "../constants";
 const homeStyles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: constantsVals.backgroundColor + "70",
+      backgroundColor: constantsVals.backgroundColor + "50",
     },
     header: {
         paddingHorizontal: constantsVals.xpadding,
@@ -40,7 +40,7 @@ const homeStyles = StyleSheet.create({
     },
     searchButton: {
         padding: 18,
-        backgroundColor: "#222",
+        backgroundColor: constantsVals.black,
         borderRadius: 10
     },
     categoriesList: {
@@ -71,7 +71,7 @@ const homeStyles = StyleSheet.create({
         paddingBottom: constantsVals.ypadding,
     },
     bottomNavigationBar: {
-        backgroundColor: "#222",
+        backgroundColor: constantsVals.black,
         borderRadius: 25,
         flexDirection: "row"
     },
@@ -79,6 +79,50 @@ const homeStyles = StyleSheet.create({
         flex: 1,
         padding: 25,
         alignItems: "center"
+    },
+    productCardWrapper: {
+        paddingTop: 60,
+        marginRight: 20,
+    },
+    productCard: {
+        width: 250,
+        height: 300,
+        backgroundColor: "white",
+        borderRadius: 15,
+        overflow: "visible",
+    },
+    productImageBox: {
+        backgroundColor: constantsVals.backgroundColor + "aa",
+        alignItems: "center",
+        height: "50%",
+        borderRadius: 15,
+        overflow: "visible",
+        justifyContent: "flex-start",
+        position: "relative"
+    },
+    productImage: {
+        width: "100%",
+        height: "50%",
+        overflow: "visible",
+        position: "absolute",
+        left: "0%",
+        resizeMode: "contain",
+    },
+    productDescription: {
+        padding: 20,
+        justifyContent: "space-between",
+        height: "50%"
+    },  
+    rating: {
+        position: "absolute",
+        flexDirection: "row",
+        alignItems: "center",   
+        paddingVertical: 8,
+        paddingHorizontal: 12,
+        bottom: 20,
+        right: 20,
+        borderRadius: 10,
+        backgroundColor: "#ffffffaa"
     }
   });
 

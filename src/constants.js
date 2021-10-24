@@ -9,8 +9,10 @@ const constantsVals = {
     ypadding: 20,
 
     // color values
+    black: "#222",
     primaryColor: "#ed4315",
-    backgroundColor: "#e5f6fd"
+    backgroundColor: "#e5f6fd",
+
 }
 
 export default constantsVals;

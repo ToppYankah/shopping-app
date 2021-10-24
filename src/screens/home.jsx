@@ -1,12 +1,15 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useState } from 'react';
-import { ScrollView, StyleSheet, Text, TextInput, TouchableWithoutFeedback, View } from 'react-native';
+import React, { useState, useRef } from 'react';
+import { Animated, ScrollView, Text, Image, TextInput, TouchableWithoutFeedback, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import homeStyles from '../styles/home';
-import {Feather} from '@expo/vector-icons';
+import {Feather, Foundation} from '@expo/vector-icons';
 import constantsVals from '../constants';
+import sofa1 from '../../assets/chair1.png';
+import IconButton from '../components/iconButton';
+import RatingCard from '../components/ratingCard';
 
-export default function HomeScreen() {
+export default function HomeScreen({navigation}) {
     const categories = [
         "Most Popular", "Chairs", "Sofers", "Trenches", "Benches"
     ];
@@ -40,7 +43,6 @@ export default function HomeScreen() {
               </View>
           </View>
 
-
           {/* Categories Area */}
           <View style={homeStyles.categoriesContainer}>
             <ScrollView style={homeStyles.categoriesList} horizontal={true} showsHorizontalScrollIndicator={false}>
@@ -48,18 +50,69 @@ export default function HomeScreen() {
             </ScrollView>
           </View>
 
-          <View style={{flex: 1}}>
-            <ProductsView />
-          </View>
+          <ScrollView style={{flex: 1}} horizontal={true} showsHorizontalScrollIndicator={false}>
+              <View style={{width: 30}}></View>
+              <ProductCard onPress={()=>navigation.navigate("SingleProduct")} />
+              <ProductCard onPress={()=>navigation.navigate("SingleProduct")} />
+              <ProductCard onPress={()=>navigation.navigate("SingleProduct")} />
+              <ProductCard onPress={()=>navigation.navigate("SingleProduct")} />
+              <View style={{width: 10}}></View>
+          </ScrollView>
 
         <BottomNavigationBar index={1} />
     </View>
   );
 }
 
-const ProductsView = ()=>{
-    return <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-    </ScrollView>
+const ProductCard = ({onPress})=>{
+    const scaleAnim = useRef(new Animated.Value(1)).current;
+
+    const scaleDown = () => {
+        // Will change fadeAnim value to 1 in 5 seconds
+        Animated.timing(scaleAnim, {
+          toValue: 0.95,
+          duration: 200,
+          useNativeDriver: true,
+        }).start();
+      };
+
+    const scaleUp= () => {
+        // Will change fadeAnim value to 1 in 5 seconds
+        Animated.timing(scaleAnim, {
+          toValue: 1,
+          duration: 200,
+          useNativeDriver: true,
+        }).start();
+    };
+
+    return <TouchableWithoutFeedback onPress={onPress} onPressIn={scaleDown} onPressOut={scaleUp}>
+        <Animated.View style={{transform: [{scale: scaleAnim}] ,...homeStyles.productCardWrapper}}>
+        <View style={homeStyles.productCard}>
+        <View style={homeStyles.productImageBox}>
+            <View style={homeStyles.rating}>
+                <Foundation style={{marginRight: 5}} name="star" color="orange" size={16} />
+                <Text style={{color: "orange", fontFamily: constantsVals.fmedium}}>5.0</Text>
+            </View>
+            <RatingCard />
+        </View>
+        <View style={homeStyles.productDescription}>
+            <View>
+                <Text style={{fontFamily: constantsVals.fmedium, marginBottom: 8}}>Scandinavian Chair</Text>
+                <Text style={{fontFamily: constantsVals.fregular, color: "#777"}}>Chairs</Text>
+            </View>
+            <View style={{flexDirection: "row", alignItems: "center", justifyContent: "space-between"}}>
+                <Text style={{fontWeight: "bold", fontSize: 17}}>&cent;25.80</Text>
+                <View style={{flexDirection: "row"}}>
+                    <IconButton color="orange" parent={Foundation} transparent={true} name="heart" />
+                    <View style={{width: 10}}></View>
+                    <IconButton parent={Foundation} name="plus" />
+                </View>
+            </View>
+        </View>
+    </View>
+    <Image source={sofa1} style={homeStyles.productImage} />
+    </Animated.View>
+    </TouchableWithoutFeedback>
 }
 
 const CategoryItem = ({active, label, onSelect})=>{
