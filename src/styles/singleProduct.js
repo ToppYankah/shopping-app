@@ -45,12 +45,4 @@ import constantsVals from "../constants";
         color: "#777",
         lineHeight: 25
     },
-    colorWrapper: {
-        width: 30,
-        height: 30,
-        padding: 3,
-        borderRadius: 30,
-        marginRight: 5,
-        borderWidth: 2,
-    }
 });

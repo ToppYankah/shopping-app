@@ -5,8 +5,11 @@ import IconButton from "../components/iconButton";
 import { styles } from "../styles/singleProduct";
 import {Feather} from '@expo/vector-icons';
 import RatingCard from "../components/ratingCard";
-import image from "../../assets/chair1.png";
+import image from "../../assets/chair2.png";
 import constantsVals from "../constants";
+import AppButton from "../components/appButton";
+import QuantitySelector from "../components/quantityPicker";
+import ColorPicker from "../components/colorPicker";
 
 export default function SingleProductScreen({navigation}){
     return (
@@ -21,21 +24,30 @@ export default function SingleProductScreen({navigation}){
             <View style={styles.detailsWrapper}>
                 <View style={styles.details}>
                     <ScrollView>
+                        {/* Category & Price section */}
                         <View style={{flexDirection: "row", justifyContent: "space-between"}}>
                             <Text style={{fontFamily: constantsVals.fmedium, color: "#999"}}>Chairs</Text>
                             <Text style={{fontFamily: constantsVals.fbold, fontSize: 18}}>&cent;20.50</Text>
                         </View>
+
+                        {/* Product Name */}
                         <Text style={styles.productName}>Minimalist style with pillow</Text>
+
+                        {/* Product description */}
                         <Text style={styles.description}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis dolores deserunt fugiat corrupti, accusantium qui quod alias illum natus.</Text>
+
+                        {/* Product Quantity & Color */}
                         <View style={{flexDirection: "row", justifyContent: "space-between", marginVertical: 20}}>
                             <ColorPicker color="orange" />
                             <QuantitySelector />
                         </View>
                     </ScrollView>
+
+                    {/* Favorite & Add to cart section */}
                     <View style={{flex: 1, flexDirection: "row", alignItems: "center"}}>
                         <IconButton name="heart" size={25} transparent={true} parent={Feather} />
                         <View style={{marginRight: 20}}/>
-                        <AppButton 
+                        <AppButton
                         stretch={true} 
                         text="Add to cart" 
                         tail={ <IconButton backgroundColor="#fff2" color="white" size={20} parent={Feather} name="shopping-cart" />
@@ -52,34 +64,4 @@ export default function SingleProductScreen({navigation}){
             </View>
         </View>
     )
-}
-
-const ColorPicker = ({color})=>{
-    const colors = ["green", "orange"];
-    return <View style={{flexDirection: "row", alignItems: "center"}}>
-        <Text style={{marginRight: 10, fontFamily: constantsVals.fmedium, color: "#777"}}>Colors</Text>
-        {colors.map(item=>{
-            return <View style={{borderColor: item === color ? constantsVals.black : "transparent", ...styles.colorWrapper}}>
-                <View style={{width: "100%", height: "100%", borderRadius: "100%", backgroundColor: item}}></View>
-            </View>
-        })}
-    </View>
-}
-
-const QuantitySelector = ()=>{
-    return <View style={{backgroundColor: constantsVals.backgroundColor, borderRadius: 30, flexDirection: "row", alignItems: "center"}}>
-        <IconButton size={15} name="minus" transparent={true} parent={Feather} />
-        <Text style={{marginHorizontal: 10, fontFamily: constantsVals.fmedium}}>5</Text>
-        <IconButton size={15} name="plus" parent={Feather} />
-    </View>
-}
-
-const AppButton = ({stretch=false, text="Button", tail: Tail=<View />})=>{
-    return <TouchableNativeFeedback>
-        <View style={{flex: stretch ? 1 : 0, flexDirection: "row", backgroundColor: constantsVals.black, borderRadius: 20, padding: 10, alignItems: "center", justifyContent: "center"}}>
-            <Text style={{color: "white", fontFamily: constantsVals.fmedium}}>{text}</Text>
-            <View style={{marginRight: 10}} />
-            {Tail}
-        </View>
-    </TouchableNativeFeedback>
 }

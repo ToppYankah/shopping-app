@@ -5,7 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import homeStyles from '../styles/home';
 import {Feather, Foundation} from '@expo/vector-icons';
 import constantsVals from '../constants';
-import sofa1 from '../../assets/chair1.png';
+import sofa1 from '../../assets/chair2.png';
 import IconButton from '../components/iconButton';
 import RatingCard from '../components/ratingCard';
 
