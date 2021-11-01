@@ -9,6 +9,7 @@ import SingleProductScreen from './src/screens/singleProduct';
 import CartScreen from './src/screens/cart';
 import { ProductsProvider } from './src/providers/products';
 import { OrderProvider } from './src/providers/order';
+import { CartProvider } from './src/providers/cart';
 
 const Stack = createNativeStackNavigator();
 
@@ -25,13 +26,15 @@ export default function App() {
     return (
       <ProductsProvider>
         <OrderProvider>
-          <NavigationContainer >
-            <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="Home">
-              <Stack.Screen name="Home" component={HomeScreen} />
-              <Stack.Screen name="SingleProduct" component={SingleProductScreen} />
-              <Stack.Screen name="Cart" component={CartScreen} />
-            </Stack.Navigator>
-          </NavigationContainer>
+          <CartProvider>
+            <NavigationContainer >
+              <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="Home">
+                <Stack.Screen name="Home" component={HomeScreen} />
+                <Stack.Screen name="SingleProduct" component={SingleProductScreen} />
+                <Stack.Screen name="Cart" component={CartScreen} />
+              </Stack.Navigator>
+            </NavigationContainer>
+          </CartProvider>
         </OrderProvider>
       </ProductsProvider>
     );

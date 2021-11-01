@@ -13,7 +13,8 @@ const database = {
             }
         }
     ],
-    orders: []
+    orders: [],
+    cart: []
 }
 
 export default database;

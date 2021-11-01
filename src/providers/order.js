@@ -12,7 +12,7 @@ export function OrderProvider({ children }) {
 
     useEffect(() => {
         setData(database.orders)
-    }, [database.products]);
+    }, [database.orders]);
 
     return (
         <OrderContext.Provider value={{data}}>
