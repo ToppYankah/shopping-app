@@ -6,6 +6,9 @@ import AppLoading from 'expo-app-loading';
 // import { useFonts, SourceSansPro_400Regular, SourceSansPro_700Bold } from '@expo-google-fonts/source-sans-pro';
 import { useFonts, Montserrat_400Regular, Montserrat_600SemiBold, Montserrat_800ExtraBold } from '@expo-google-fonts/montserrat';
 import SingleProductScreen from './src/screens/singleProduct';
+import CartScreen from './src/screens/cart';
+import { ProductsProvider } from './src/providers/products';
+import { OrderProvider } from './src/providers/order';
 
 const Stack = createNativeStackNavigator();
 
@@ -20,12 +23,17 @@ export default function App() {
     return <AppLoading />;
   } else {
     return (
-      <NavigationContainer >
-        <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="Home">
-          <Stack.Screen name="Home" component={HomeScreen} />
-          <Stack.Screen name="SingleProduct" component={SingleProductScreen} />
-        </Stack.Navigator>
-      </NavigationContainer>
+      <ProductsProvider>
+        <OrderProvider>
+          <NavigationContainer >
+            <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="Home">
+              <Stack.Screen name="Home" component={HomeScreen} />
+              <Stack.Screen name="SingleProduct" component={SingleProductScreen} />
+              <Stack.Screen name="Cart" component={CartScreen} />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </OrderProvider>
+      </ProductsProvider>
     );
   }
 }

@@ -48,6 +48,7 @@ export default function SingleProductScreen({navigation}){
                         <IconButton name="heart" size={25} transparent={true} parent={Feather} />
                         <View style={{marginRight: 20}}/>
                         <AppButton
+                        onPress={()=>navigation.navigate("Cart")}
                         stretch={true} 
                         text="Add to cart" 
                         tail={ <IconButton backgroundColor="#fff2" color="white" size={20} parent={Feather} name="shopping-cart" />
