@@ -1,23 +1,42 @@
-import React from "react";
-import { View, Text, Image, TouchableNativeFeedback, ScrollView } from "react-native";
+import React, { useState } from "react";
+import { View, Text, Image, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import IconButton from "../components/iconButton";
 import { styles } from "../styles/singleProduct";
 import {Feather} from '@expo/vector-icons';
 import RatingCard from "../components/ratingCard";
-import image from "../../assets/chair2.png";
 import constantsVals from "../constants";
 import AppButton from "../components/appButton";
 import QuantitySelector from "../components/quantityPicker";
 import ColorPicker from "../components/colorPicker";
+import { useCart } from "../providers/cart";
 
-export default function SingleProductScreen({navigation}){
+export default function SingleProductScreen({route, navigation}){
+    const product = route.params;
+    const {addItem} = useCart();
+    const [selectedColor, setSelectedColor] = useState(Object.keys(product.images)[1]);
+    const [quantity, setQuantity] = useState(1);
+
+    const handleAddToCart = ()=>{
+        addItem({
+            product: {
+                id: product.id,
+                name: product.name,
+                price: product.price,
+                image: product.images[selectedColor],
+            },
+            quantity,
+        });
+
+        navigation.navigate("Cart");
+    }
+
     return (
         <View style={styles.screenWrapper}>
             <SafeAreaView edges={['top']}/>
             {/* Product image */}
             <View style={styles.productImageArea}>
-                <Image source={image} style={{width: "80%", height: "90%", resizeMode: "contain"}} />
+                <Image source={product.images[selectedColor] || product.images.main} style={{width: "80%", height: "90%", resizeMode: "contain"}} />
             </View>
 
             {/* Product details area */}
@@ -26,20 +45,20 @@ export default function SingleProductScreen({navigation}){
                     <ScrollView>
                         {/* Category & Price section */}
                         <View style={{flexDirection: "row", justifyContent: "space-between"}}>
-                            <Text style={{fontFamily: constantsVals.fmedium, color: "#999"}}>Chairs</Text>
-                            <Text style={{fontFamily: constantsVals.fbold, fontSize: 18}}>&cent;20.50</Text>
+                            <Text style={{fontFamily: constantsVals.fmedium, color: "#999"}}>{product.category}</Text>
+                            <Text style={{fontFamily: constantsVals.fbold, fontSize: 18}}>&cent; {product.price.toFixed(2)}</Text>
                         </View>
 
                         {/* Product Name */}
-                        <Text style={styles.productName}>Minimalist style with pillow</Text>
+                        <Text style={styles.productName}>{product.name}</Text>
 
                         {/* Product description */}
-                        <Text style={styles.description}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis dolores deserunt fugiat corrupti, accusantium qui quod alias illum natus.</Text>
+                        <Text style={styles.description}>{product.description}</Text>
 
                         {/* Product Quantity & Color */}
                         <View style={{flexDirection: "row", justifyContent: "space-between", marginVertical: 20}}>
-                            <ColorPicker color="orange" />
-                            <QuantitySelector />
+                            <ColorPicker onChange={(color)=> setSelectedColor(color)} color={selectedColor} colors={Object.keys(product.images).filter(i=> i !== "main")} />
+                            <QuantitySelector onChange={(qty)=> setQuantity(()=> qty)} max={product.stock} />
                         </View>
                     </ScrollView>
 
@@ -48,10 +67,10 @@ export default function SingleProductScreen({navigation}){
                         <IconButton name="heart" size={25} transparent={true} parent={Feather} />
                         <View style={{marginRight: 20}}/>
                         <AppButton
-                        onPress={()=>navigation.navigate("Cart")}
-                        stretch={true} 
-                        text="Add to cart" 
-                        tail={ <IconButton backgroundColor="#fff2" color="white" size={20} parent={Feather} name="shopping-cart" />
+                            onPress={handleAddToCart}
+                            stretch={true} 
+                            text="Add to cart"
+                            tail={ <IconButton backgroundColor="#fff2" color="white" size={20} parent={Feather} name="shopping-cart" />
                             } 
                         />
                     </View>

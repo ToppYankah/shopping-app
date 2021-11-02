@@ -1,15 +1,28 @@
 import React from 'react';
-import { Image, ScrollView, Text, View } from 'react-native';
+import { Image, ScrollView, Text, TouchableWithoutFeedback, View } from 'react-native';
 import IconButton from '../components/iconButton';
 import { styles } from '../styles/cart';
 import {Feather} from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import constantsVals from '../constants';
 import AppButton from '../components/appButton';
-import image from "../../assets/chair2.png";
 import QuantitySelector from '../components/quantityPicker';
+import { useCart } from '../providers/cart';
+import { useProducts } from '../providers/products';
+import { useMemo } from 'react';
 
 const CartScreen = ({navigation}) => {
+    const {data} = useCart();
+    const totalPrice = useMemo(()=>{
+        let output = 0;
+
+        data.forEach(item=> {
+            output += (item.product.price * item.quantity);
+        });
+
+        return output;
+    }, [data])
+
     return (
         <View style={styles.screenWrapper}>
             <SafeAreaView edges={['top']} />
@@ -22,11 +35,7 @@ const CartScreen = ({navigation}) => {
 
             {/* Cart items list */}
             <ScrollView style={styles.itemsView}>
-                <CartItem />
-                <CartItem />
-                <CartItem />
-                <CartItem />
-                <CartItem />
+                {data.map((item, key)=> <CartItem data={item} key={key} />)}
             </ScrollView>
 
             {/* Total amount box */}
@@ -37,39 +46,45 @@ const CartScreen = ({navigation}) => {
                 </View>
                 <View style={styles.tallyBox}>
                         <Text style={styles.tallyLabel}>Total</Text>
-                        <Text style={styles.tallyTotal}>&cent; 10.00</Text>
+                        <Text style={styles.tallyTotal}>&cent; {totalPrice.toFixed(2)}</Text>
                     </View>
                     <View style={{paddingTop: 0, ...styles.tallyBox}}>
                         <Text style={styles.tallyLabel}>Delivery Charge</Text>
-                        <Text style={styles.tallyTotal}>&cent; 12.00</Text>
+                        <Text style={styles.tallyTotal}>&cent; 5.00</Text>
                     </View>
                     <View style={{borderWidth: 1, borderStyle: "dashed", borderRadius: 1, borderColor: "#ddd",  marginVertical: 10}} />
                     <View style={styles.tallyBox}>
                         <Text style={{...styles.tallyLabel, color: "black"}}>Total</Text>
-                        <Text style={styles.tallyTotal}>&cent; 50.00</Text>
+                        <Text style={styles.tallyTotal}>&cent; {(totalPrice + 5).toFixed(2)}</Text>
                     </View>
-                    <AppButton style={{marginTop: 10}} bold={true} text="Checkout" />
+                    <AppButton onPress={()=>navigation.navigate("Checkout")} style={{marginTop: 10}} bold={true} text="Checkout" />
                 </View>
             </View>
         </View>
     );
 }
 
-const CartItem = () => {
+const CartItem = ({data}) => {
+    const {getProduct} = useProducts();
+    const {updateItem} = useCart();
+
     return (
         <View style={styles.cartItemBox}>
-            <View style={styles.checkBox}><View style={styles.checkIndicator}/></View>
+            <TouchableWithoutFeedback onPress={()=> updateItem(data.id, {select: !data.select})}>
+                <View style={styles.checkBox}>
+                    {data.select ? <View style={styles.checkIndicator}/> : <View />}
+                </View>
+            </TouchableWithoutFeedback>
             <View style={styles.cartItemImageBox}>
-                <Image source={image} style={{width: 90, height: 90, resizeMode: "contain"}} />
+                <Image source={data.product.image} style={{width: 90, height: 90, resizeMode: "contain"}} />
             </View>
             <View>
-                <Text style={{fontFamily: constantsVals.fmedium, marginBottom: 10, fontSize: 17}}>Yellow Chair</Text>
-                <Text style={{fontFamily: constantsVals.fbold, marginBottom: 10, fontSize: 16}}>&cent; 25.00</Text>
-                <QuantitySelector />
+                <Text style={{fontFamily: constantsVals.fmedium, marginBottom: 10, fontSize: 17}}>{data.product.name}</Text>
+                <Text style={{fontFamily: constantsVals.fbold, marginBottom: 10, fontSize: 16}}>&cent; {(data.product.price * data.quantity).toFixed(2)}</Text>
+                <QuantitySelector max={getProduct(data.product.id).stock} initialValue={data.quantity} onChange={(quantity)=> updateItem(data.id, {quantity})} />
             </View>
         </View>
     );
 }
-
 
 export default CartScreen;

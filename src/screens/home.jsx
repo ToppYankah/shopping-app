@@ -5,14 +5,16 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import homeStyles from '../styles/home';
 import {Feather, Foundation} from '@expo/vector-icons';
 import constantsVals from '../constants';
-import sofa1 from '../../assets/chair2.png';
 import IconButton from '../components/iconButton';
 import RatingCard from '../components/ratingCard';
+import { useProducts } from '../providers/products';
 
 export default function HomeScreen({navigation}) {
     const categories = [
         "Most Popular", "Chairs", "Sofers", "Trenches", "Benches"
     ];
+
+    const {data: products} = useProducts();
 
     const [category, setCategory] = useState(categories[0]);
 
@@ -52,19 +54,16 @@ export default function HomeScreen({navigation}) {
 
           <ScrollView style={{flex: 1}} horizontal={true} showsHorizontalScrollIndicator={false}>
               <View style={{width: 30}}></View>
-              <ProductCard onPress={()=>navigation.navigate("SingleProduct")} />
-              <ProductCard onPress={()=>navigation.navigate("SingleProduct")} />
-              <ProductCard onPress={()=>navigation.navigate("SingleProduct")} />
-              <ProductCard onPress={()=>navigation.navigate("SingleProduct")} />
+              {products.map((product, key)=> <ProductCard key={key} data={product} onPress={()=>navigation.navigate("SingleProduct", product)} />)}
               <View style={{width: 10}}></View>
           </ScrollView>
 
-        <BottomNavigationBar index={1} />
+        <BottomNavigationBar onNavigate={screen=> navigation.navigate(screen)} index={1} />
     </View>
   );
 }
 
-const ProductCard = ({onPress})=>{
+const ProductCard = ({data, onPress})=>{
     const scaleAnim = useRef(new Animated.Value(1)).current;
 
     const scaleDown = () => {
@@ -97,11 +96,11 @@ const ProductCard = ({onPress})=>{
         </View>
         <View style={homeStyles.productDescription}>
             <View>
-                <Text style={{fontFamily: constantsVals.fmedium, marginBottom: 8}}>Scandinavian Chair</Text>
-                <Text style={{fontFamily: constantsVals.fregular, color: "#777"}}>Chairs</Text>
+                <Text style={{fontFamily: constantsVals.fmedium, marginBottom: 8, textTransform: "capitalize"}}>{data.name}</Text>
+                <Text style={{fontFamily: constantsVals.fregular, color: "#777", textTransform: "capitalize"}}>{data.category}</Text>
             </View>
             <View style={{flexDirection: "row", alignItems: "center", justifyContent: "space-between"}}>
-                <Text style={{fontWeight: "bold", fontSize: 17}}>&cent;25.80</Text>
+                <Text style={{fontWeight: "bold", fontSize: 17}}>&cent; {data.price.toFixed(2)}</Text>
                 <View style={{flexDirection: "row"}}>
                     <IconButton color="orange" parent={Foundation} transparent={true} name="heart" />
                     <View style={{width: 10}}></View>
@@ -110,7 +109,7 @@ const ProductCard = ({onPress})=>{
             </View>
         </View>
     </View>
-    <Image source={sofa1} style={homeStyles.productImage} />
+    <Image source={data.images.main} style={homeStyles.productImage} />
     </Animated.View>
     </TouchableWithoutFeedback>
 }
@@ -124,7 +123,7 @@ const CategoryItem = ({active, label, onSelect})=>{
     </TouchableWithoutFeedback>;
 }
 
-const BottomNavigationBar = ({index})=>{
+const BottomNavigationBar = ({index, onNavigate})=>{
     return <View style={homeStyles.bottomNavigationContainer}>
         <View style={homeStyles.bottomNavigationBar}>
             <TouchableWithoutFeedback>
@@ -142,7 +141,7 @@ const BottomNavigationBar = ({index})=>{
                     <Feather name="user" size={25} color={index === 3 ? constantsVals.primaryColor : "#fff"} />
                 </View>
             </TouchableWithoutFeedback>
-            <TouchableWithoutFeedback>
+            <TouchableWithoutFeedback onPress={()=> onNavigate("Cart")}>
                 <View style={homeStyles.bottomNavigationBarItem}>
                     <Feather name="shopping-bag" size={25} color={index === 4 ? constantsVals.primaryColor : "#fff"} />
                 </View>

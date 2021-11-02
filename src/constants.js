@@ -5,7 +5,7 @@ const constantsVals = {
     fregular: "Montserrat_400Regular",
 
     // computable values
-    xpadding: 25,
+    xpadding: 15,
     ypadding: 20,
 
     // color values

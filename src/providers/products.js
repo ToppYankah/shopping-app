@@ -14,8 +14,10 @@ export function ProductsProvider({ children }) {
         setData(database.products)
     }, [database.products]);
 
+    const getProduct = (id)=> data.find((product)=> product.id === id);
+
     return (
-        <ProductsContext.Provider value={{data}}>
+        <ProductsContext.Provider value={{data, getProduct}}>
             {children}
         </ProductsContext.Provider>
     )
