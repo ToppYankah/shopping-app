@@ -37,50 +37,52 @@ const CheckoutScreen = ({navigation}) => {
             </View>
 
             <View style={{flex: 1, paddingHorizontal: constantsVals.xpadding}}>
-                {/* Selected Items for checkout */}
-                <View style={styles.sectionBox}>
-                    <View style={{flex: 1}}>
-                        <Text style={{fontSize: 15, fontFamily: constantsVals.fmedium, marginBottom: 10}}>Selected Items</Text>
-                        <ScrollView horizontal={true} style={{marginTop: 10}} showsHorizontalScrollIndicator={false}>
-                            {items.map((item, key)=> <View>
-                                    <Image key={key} source={item.product.image} style={{width: 70, height: 70, resizeMode: "contain", marginRight: 10}} />
-                                    {item.quantity > 1 && <View style={{backgroundColor: "#fffa", borderWidth: 2, borderColor: "#eee", position: "absolute",paddingVertical: 3, paddingHorizontal: 10, borderRadius: 10}}>
-                                        <Text style={{fontFamily: constantsVals.fmedium}}>{item.quantity}</Text>
-                                    </View>}
-                                </View>)}
-                        </ScrollView>
-                    </View>
-                </View>
+                <ScrollView showsVerticalScrollIndicator={false} overScrollMode={"never"}>
+                        {/* Selected Items for checkout */}
+                        <View style={styles.sectionBox}>
+                            <View style={{flex: 1}}>
+                                <Text style={{fontSize: 15, fontFamily: constantsVals.fmedium, marginBottom: 10}}>Selected Items</Text>
+                                <ScrollView horizontal={true} style={{marginTop: 10}} showsHorizontalScrollIndicator={false}>
+                                    {items.map((item, key)=> <View>
+                                            <Image key={key} source={item.product.image} style={{width: 70, height: 70, resizeMode: "contain", marginRight: 10}} />
+                                            {item.quantity > 1 && <View style={{backgroundColor: "#fffa", borderWidth: 2, borderColor: "#eee", position: "absolute",paddingVertical: 3, paddingHorizontal: 10, borderRadius: 10}}>
+                                                <Text style={{fontFamily: constantsVals.fmedium}}>{item.quantity}</Text>
+                                            </View>}
+                                        </View>)}
+                                </ScrollView>
+                            </View>
+                        </View>
 
-                {/* Delivery method for checkout */}
-                <View style={styles.sectionBox}>
-                    <View style={{flex: 1}}>
-                        <Text style={{fontSize: 15, fontFamily: constantsVals.fmedium, marginBottom: 10}}>Delivery Method</Text>
-                        <Text style={{fontSize: 13, fontFamily: constantsVals.fmedium, color: "#999"}}>Standard delivery (+$2.65)</Text>
-                    </View>
-                    <IconButton parent={Feather} name="chevron-down" size={20} />
-                </View>
-
-
-                {/* Address for delivery */}
-                <View style={styles.sectionBox}>
-                    <View style={{flex: 1}}>
-                        <Text style={{fontSize: 15, fontFamily: constantsVals.fmedium, marginBottom: 10}}>Address</Text>
-                        <Text style={{fontSize: 13, fontFamily: constantsVals.fmedium, color: "#999"}}>Achimota, Accra Ghana</Text>
-                        <Text style={{fontSize: 13, fontFamily: constantsVals.fmedium, color: "#999"}}>300 Post Street 12772</Text>
-                    </View>
-                    <IconButton parent={Feather} name="edit" light={true} color="#000" size={20} />
-                </View>
+                        {/* Delivery method for checkout */}
+                        <View style={styles.sectionBox}>
+                            <View style={{flex: 1}}>
+                                <Text style={{fontSize: 15, fontFamily: constantsVals.fmedium, marginBottom: 10}}>Delivery Method</Text>
+                                <Text style={{fontSize: 13, fontFamily: constantsVals.fmedium, color: "#999"}}>Standard delivery (+$2.65)</Text>
+                            </View>
+                            <IconButton parent={Feather} name="chevron-down" size={20} />
+                        </View>
 
 
-                {/* Payment method for payment */}
-                <View style={{...styles.sectionBox, flexDirection: "column"}}>
-                    <Text style={{fontSize: 15, fontFamily: constantsVals.fmedium, marginBottom: 10}}>Payment Method</Text>
-                    <View>{paymentMethods.map((m, key)=> 
-                            <PaymentMethod key={key} selected={m.name === method} onSelect={()=> setMethod(m.name)} imageSource={m.source} name={m.name}/>
-                        )}
-                    </View>
-                </View>
+                        {/* Address for delivery */}
+                        <View style={styles.sectionBox}>
+                            <View style={{flex: 1}}>
+                                <Text style={{fontSize: 15, fontFamily: constantsVals.fmedium, marginBottom: 10}}>Address</Text>
+                                <Text style={{fontSize: 13, fontFamily: constantsVals.fmedium, color: "#999"}}>Achimota, Accra Ghana</Text>
+                                <Text style={{fontSize: 13, fontFamily: constantsVals.fmedium, color: "#999"}}>300 Post Street 12772</Text>
+                            </View>
+                            <IconButton parent={Feather} name="edit" light={true} color="#000" size={20} />
+                        </View>
+
+
+                        {/* Payment method for payment */}
+                        <View style={{...styles.sectionBox, flexDirection: "column"}}>
+                            <Text style={{fontSize: 15, fontFamily: constantsVals.fmedium, marginBottom: 10}}>Payment Method</Text>
+                            <View>{paymentMethods.map((m, key)=> 
+                                    <PaymentMethod key={key} selected={m.name === method} onSelect={()=> setMethod(m.name)} imageSource={m.source} name={m.name}/>
+                                )}
+                            </View>
+                        </View>
+                </ScrollView>
             </View>
 
             <View style={{paddingHorizontal: constantsVals.xpadding, paddingBottom: constantsVals.ypadding * 1.5}}>
