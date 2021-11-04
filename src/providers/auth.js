@@ -3,7 +3,7 @@ import database from '../sampleDb';
 
 const AuthContext = React.createContext();
 
-export function useCart() {
+export function useAuth() {
     return useContext(AuthContext);
 }
 

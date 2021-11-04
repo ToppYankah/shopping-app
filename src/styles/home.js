@@ -4,7 +4,7 @@ import constantsVals from "../constants";
 const homeStyles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: constantsVals.backgroundColor + "50",
+      backgroundColor: constantsVals.backgroundColor + "30",
     },
     header: {
         paddingHorizontal: constantsVals.xpadding,

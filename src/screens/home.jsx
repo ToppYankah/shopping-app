@@ -8,11 +8,14 @@ import constantsVals from '../constants';
 import IconButton from '../components/iconButton';
 import RatingCard from '../components/ratingCard';
 import { useProducts } from '../providers/products';
+import logo from '../../assets/logo.png';
+import { useAuth } from '../providers/auth';
 
 export default function HomeScreen({navigation}) {
     const categories = [
         "Most Popular", "Chairs", "Sofers", "Trenches", "Benches"
     ];
+    const {user} = useAuth();
 
     const {data: products} = useProducts();
 
@@ -24,8 +27,11 @@ export default function HomeScreen({navigation}) {
           <SafeAreaView edges={['top']} />
           {/* Immediate header */}
           <View style={homeStyles.header}>
-            <IconButton onPress={()=>navigation.navigate("Login")} parent={Feather} name="menu" light={true} size={25} />
-            <IconButton parent={Feather} name="user" light={true} size={25} />
+              <View style={{flexDirection: "row", alignItems: "center"}}>
+                <Image source={logo} style={{width: 30, height: 30, resizeMode: "contain", marginRight: 5}} />
+                <Text style={{fontFamily: constantsVals.fbold, fontSize: 18}}>Furnishop</Text>
+              </View>
+                <IconButton onPress={()=>navigation.navigate(user ? "Profile" : "Login")} parent={Feather} name="user" light={true} size={25} />
           </View>
 
           {/* Welcome text content */}
