@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { Text, View, TouchableOpacity } from 'react-native';
 import IconButton from '../components/iconButton';
 import styles from '../styles/auth';
 import {Feather} from '@expo/vector-icons';
@@ -8,7 +8,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import AppButton from '../components/appButton';
 import TextField from '../components/textInput';
 
-const LoginScreen = ({navigation}) => {
+const SignupScreen = ({navigation}) => {
     return (
         <View style={styles.screenWrapper}>
             <SafeAreaView edges={["top"]} />
@@ -18,22 +18,21 @@ const LoginScreen = ({navigation}) => {
             </View>
             <View style={{paddingHorizontal: constantsVals.xpadding * 2, flex: 1}}>
                 <View>
-                    <Text style={{fontFamily: constantsVals.fbold, fontSize: 40}}>Login</Text>
-                    <Text style={{fontFamily: constantsVals.fbold, fontSize: 40}}>to account</Text>
+                    <Text style={{fontFamily: constantsVals.fbold, fontSize: 40}}>Create</Text>
+                    <Text style={{fontFamily: constantsVals.fbold, fontSize: 40}}>free account</Text>
                 </View>
                 <View style={styles.form}>
-                    <TextField label="Email" placeholder="your-email@gmail.com" onChange={()=>{}} />
+                    <TextField label="Username" placeholder="choose username" onChange={()=>{}} />
+                    <TextField label="Email" placeholder="your-email@mail.com" onChange={()=>{}} />
                     <TextField label="Password" placeholder="*********" onChange={()=>{}} />
-                    <AppButton bold={true} text="Login" />
-                </View>
-                <View>
-                    <Text style={{fontSize: 16, fontFamily: constantsVals.fmedium, textAlign: "center"}}>Forgot your password?</Text>
+                    <TextField label="Confirm Password" placeholder="*********" onChange={()=>{}} />
+                    <AppButton bold={true} text="Create Account" />
                 </View>
                 <View style={{flex: 1}}/>
                 <View>
-                    <Text style={{fontSize: 16, fontFamily: constantsVals.fmedium, textAlign: "center"}}>Don't have an account? 
-                    <TouchableOpacity onPress={()=>navigation.navigate("Signup")}><Text style={{fontFamily: constantsVals.fbold}}> Sign Up</Text></TouchableOpacity>
-                </Text>
+                    <Text style={{fontSize: 16, fontFamily: constantsVals.fmedium, textAlign: "center"}}>Already have an account? 
+                        <TouchableOpacity onPress={()=>navigation.navigate("Login")}><Text style={{fontFamily: constantsVals.fbold}}> Login</Text></TouchableOpacity>
+                    </Text>
                 </View>
             </View>
             <SafeAreaView edges={["bottom"]} />
@@ -41,4 +40,4 @@ const LoginScreen = ({navigation}) => {
     );
 }
 
-export default LoginScreen;
+export default SignupScreen;

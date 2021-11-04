@@ -12,6 +12,7 @@ import { CartProvider } from './src/providers/cart';
 import CheckoutScreen from './src/screens/checkout';
 import LoginScreen from './src/screens/login';
 import { AuthProvider } from './src/providers/auth';
+import SignupScreen from './src/screens/signup';
 
 const Stack = createNativeStackNavigator();
 
@@ -32,8 +33,9 @@ export default function App() {
             <CartProvider>
               <NavigationContainer >
                 <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="Login">
-                  <Stack.Screen name="Home" component={HomeScreen} />
                   <Stack.Screen name="Login" component={LoginScreen} />
+                  <Stack.Screen name="Signup" component={SignupScreen} />
+                  <Stack.Screen name="Home" component={HomeScreen} />
                   <Stack.Screen name="SingleProduct" component={SingleProductScreen} />
                   <Stack.Screen name="Cart" component={CartScreen} />
                   <Stack.Screen name="Checkout" component={CheckoutScreen} />

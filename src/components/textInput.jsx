@@ -6,7 +6,7 @@ const TextField = ({placeholder = "", label="label", value="", onChange=()=>{}})
     return (
         <View style={styles.inputBox}>
             <Text style={{fontFamily: constantsVals.fmedium, fontSize: 14}}>{label}</Text>
-            <TextInput value={value} onChange={onChange} style={{paddingVertical: 5, fontSize: 16}} placeholder={placeholder} />
+            <TextInput value={value} onChange={onChange} style={{paddingVertical: 5, fontSize: 15, fontFamily: constantsVals.fregular}} placeholder={placeholder} />
         </View>
     );
 }
