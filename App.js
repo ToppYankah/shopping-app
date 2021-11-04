@@ -13,6 +13,7 @@ import CheckoutScreen from './src/screens/checkout';
 import LoginScreen from './src/screens/login';
 import { AuthProvider } from './src/providers/auth';
 import SignupScreen from './src/screens/signup';
+import OnboardingScreen from './src/screens/onBoarding';
 
 const Stack = createNativeStackNavigator();
 
@@ -32,7 +33,8 @@ export default function App() {
           <OrderProvider>
             <CartProvider>
               <NavigationContainer >
-                <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="Login">
+                <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="Onboarding">
+                  <Stack.Screen name="Onboarding" component={OnboardingScreen} />
                   <Stack.Screen name="Login" component={LoginScreen} />
                   <Stack.Screen name="Signup" component={SignupScreen} />
                   <Stack.Screen name="Home" component={HomeScreen} />
