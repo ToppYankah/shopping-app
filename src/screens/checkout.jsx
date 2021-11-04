@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Text, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Image, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import IconButton from '../components/iconButton';
 import constantsVals from '../constants';
@@ -7,13 +7,20 @@ import { styles } from '../styles/checkout';
 import {Feather, Fontisto } from '@expo/vector-icons';
 import AppButton from '../components/appButton';
 import Checkbox from '../components/checkbox';
+import paypal from '../../assets/paypal.png';
+import mastercard from '../../assets/mastercard.png';
+import visa from '../../assets/visa.png';
+import { useCart } from '../providers/cart';
 
 const CheckoutScreen = ({navigation}) => {
     const paymentMethods = [
-        {name: "Paypal", icon: "paypal-p"},
-        {name: "Master Card", icon: "mastercard"},
-        {name: "Visa", icon: "visa"},
+        {name: "Paypal", source: paypal},
+        {name: "Master Card", source: mastercard},
+        {name: "Visa", source: visa},
     ];
+
+    const {getCheckoutItems} = useCart();
+    const [items, _] = useState(()=> getCheckoutItems());
 
     const [method, setMethod] = useState(paymentMethods[0].name);
 
@@ -29,6 +36,19 @@ const CheckoutScreen = ({navigation}) => {
             </View>
 
             <View style={{flex: 1, paddingHorizontal: constantsVals.xpadding}}>
+                <View style={styles.sectionBox}>
+                    <View style={{flex: 1}}>
+                        <Text style={{fontSize: 15, fontFamily: constantsVals.fmedium, marginBottom: 10}}>Selected Items</Text>
+                        <ScrollView horizontal={true} style={{marginTop: 10}} showsHorizontalScrollIndicator={false}>
+                            {items.map((item, key)=> <View>
+                                    <Image key={key} source={item.product.image} style={{width: 70, height: 70, resizeMode: "contain", marginRight: 10}} />
+                                    {item.quantity > 1 && <View style={{backgroundColor: "#fffa", borderWidth: 2, borderColor: "#eee", position: "absolute",paddingVertical: 3, paddingHorizontal: 10, borderRadius: 10}}>
+                                        <Text style={{fontFamily: constantsVals.fmedium}}>{item.quantity}</Text>
+                                    </View>}
+                                </View>)}
+                        </ScrollView>
+                    </View>
+                </View>
                 <View style={styles.sectionBox}>
                     <View style={{flex: 1}}>
                         <Text style={{fontSize: 15, fontFamily: constantsVals.fmedium, marginBottom: 10}}>Delivery Method</Text>
@@ -49,7 +69,7 @@ const CheckoutScreen = ({navigation}) => {
                 <View style={{...styles.sectionBox, flexDirection: "column"}}>
                     <Text style={{fontSize: 15, fontFamily: constantsVals.fmedium, marginBottom: 10}}>Payment Method</Text>
                     <View>{paymentMethods.map((m, key)=> 
-                            <PaymentMethod key={key} selected={m.name === method} onSelect={()=> setMethod(m.name)} icon={m.icon} name={m.name}/>
+                            <PaymentMethod key={key} selected={m.name === method} onSelect={()=> setMethod(m.name)} imageSource={m.source} name={m.name}/>
                         )}
                     </View>
                 </View>
@@ -62,9 +82,10 @@ const CheckoutScreen = ({navigation}) => {
     );
 }
 
-const PaymentMethod = ({name, icon, size=28, selected, onSelect})=>{
+const PaymentMethod = ({name, icon, imageSource, size=28, selected, onSelect})=>{
     return <View style={{flexDirection: 'row', alignItems: "center", padding: 10}}>
-        <Fontisto name={icon} size={size} style={{width: 70}} />
+        {icon && !imageSource && <Fontisto name={icon} size={size} style={{width: 70}} />}
+        {imageSource && !icon && <Image source={imageSource} style={{width: 50, marginRight: 30, height: 40, resizeMode: "contain"}} />}
         <Text style={{fontSize: 14, fontFamily: constantsVals.fmedium, flex: 1}}>{name}</Text>
         <Checkbox selected={selected} onPress={onSelect} />
     </View>

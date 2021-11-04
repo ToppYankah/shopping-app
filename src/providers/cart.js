@@ -38,8 +38,12 @@ export function CartProvider({ children }) {
         }
     }
 
+    const getCheckoutItems = ()=>{
+        return data.filter(item=> item.select);
+    }
+
     return (
-        <CartContext.Provider value={{data, addItem, removeItem, updateItem}}>
+        <CartContext.Provider value={{data, addItem, removeItem, updateItem, getCheckoutItems}}>
             {children}
         </CartContext.Provider>
     )
