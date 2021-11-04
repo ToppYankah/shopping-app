@@ -12,30 +12,41 @@ export function useAuth() {
 export function AuthProvider({ children }) {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
 
     const signup = (data)=>{
-        const newUser = {
-            id: uuidv4(),
-            createdAt: new Date().getTime, 
-            ...data, 
-        }
+        setLoading(true);
 
         if(data){
-            database.users.push(newUser);
-            setUser(newUser);
+            const newUser = {
+                id: uuidv4(),
+                createdAt: new Date().getTime, 
+                ...data, 
+            }
+            setTimeout(()=>{
+                database.users.push(newUser);
+                setUser(newUser);
+                setLoading(false);
+            }, 500)
         }
     }
 
     const login = ({email, password})=>{
         setLoading(true);
+        let output;
 
         setTimeout(()=>{
-            let output;
             if(email && password){
-                otuput = database.users.find(user=> user.email === email && user.password === password);
+                output = database.users.find(user=> user.email === email && user.password === password);
+            }
+            if(output){
+                setLoading(false);
+                setUser(output);
+            }else{
+                setError("User does not exist");
+                setLoading(false);
             }
         }, 500)
-        return output;
     }
 
     const logout = ()=>{
@@ -43,7 +54,7 @@ export function AuthProvider({ children }) {
     }
     
     return (
-        <AuthContext.Provider value={{user, loading, signup, login, logout}}>
+        <AuthContext.Provider value={{user, error, loading, signup, login, logout}}>
             {children}
         </AuthContext.Provider>
     )
