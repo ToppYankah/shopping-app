@@ -15,7 +15,7 @@ export default function HomeScreen({navigation}) {
     const categories = [
         "Most Popular", "Chairs", "Sofers", "Trenches", "Benches"
     ];
-    const {user} = useAuth();
+    const {user, logout} = useAuth();
 
     const {data: products} = useProducts();
 
@@ -31,7 +31,7 @@ export default function HomeScreen({navigation}) {
                 <Image source={logo} style={{width: 30, height: 30, resizeMode: "contain", marginRight: 5}} />
                 <Text style={{fontFamily: constantsVals.fbold, fontSize: 18}}>Furnishop</Text>
               </View>
-                <IconButton onPress={()=>navigation.navigate(user ? "Profile" : "Login")} parent={Feather} name="user" light={true} size={25} />
+                <IconButton onPress={()=> user ? logout() : navigation.navigate(user ? "Profile" : "Login")} parent={Feather} name="user" light={true} size={25} />
           </View>
 
           {/* Welcome text content */}
