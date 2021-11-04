@@ -15,5 +15,6 @@ import constantsVals from "../constants";
     },
     form: {
         paddingVertical: 50,
+        paddingTop: 20,
     },
 });

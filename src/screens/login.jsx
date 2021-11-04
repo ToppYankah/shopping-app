@@ -26,17 +26,16 @@ const LoginScreen = ({navigation}) => {
                     <TextField label="Password" placeholder="*********" onChange={()=>{}} />
                     <AppButton bold={true} text="Login" />
                 </View>
-                <View>
+                <View style={{flex: 1}}>
                     <Text style={{fontSize: 16, fontFamily: constantsVals.fmedium, textAlign: "center"}}>Forgot your password?</Text>
                 </View>
                 <View style={{flex: 1}}/>
-                <View>
+                <View style={{paddingVertical: 40, flexDirection: "row", justifyContent: "center", alignItems: "center"}}>
                     <Text style={{fontSize: 16, fontFamily: constantsVals.fmedium, textAlign: "center"}}>Don't have an account? 
-                    <TouchableOpacity onPress={()=>navigation.navigate("Signup")}><Text style={{fontFamily: constantsVals.fbold}}> Sign Up</Text></TouchableOpacity>
-                </Text>
+                    </Text>
+                    <TouchableOpacity onPress={()=>navigation.navigate("Signup")}><Text style={{fontFamily: constantsVals.fbold, color: "orange"}}> Signup</Text></TouchableOpacity>
                 </View>
             </View>
-            <SafeAreaView edges={["bottom"]} />
         </View>
     );
 }
