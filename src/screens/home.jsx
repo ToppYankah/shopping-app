@@ -24,8 +24,8 @@ export default function HomeScreen({navigation}) {
           <SafeAreaView edges={['top']} />
           {/* Immediate header */}
           <View style={homeStyles.header}>
-            <Feather size={30} name="chrome" />
-            <Feather size={30} name="user-x" />
+            <IconButton onPress={()=>navigation.navigate("Login")} parent={Feather} name="menu" light={true} size={25} />
+            <IconButton parent={Feather} name="user" light={true} size={25} />
           </View>
 
           {/* Welcome text content */}
