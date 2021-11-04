@@ -43,8 +43,8 @@ const CheckoutScreen = ({navigation}) => {
                             <View style={{flex: 1}}>
                                 <Text style={{fontSize: 15, fontFamily: constantsVals.fmedium, marginBottom: 10}}>Selected Items</Text>
                                 <ScrollView horizontal={true} style={{marginTop: 10}} showsHorizontalScrollIndicator={false}>
-                                    {items.map((item, key)=> <View>
-                                            <Image key={key} source={item.product.image} style={{width: 70, height: 70, resizeMode: "contain", marginRight: 10}} />
+                                    {items.map((item, key)=> <View key={key}>
+                                            <Image source={item.product.image} style={{width: 70, height: 70, resizeMode: "contain", marginRight: 10}} />
                                             {item.quantity > 1 && <View style={{backgroundColor: "#fffa", borderWidth: 2, borderColor: "#eee", position: "absolute",paddingVertical: 3, paddingHorizontal: 10, borderRadius: 10}}>
                                                 <Text style={{fontFamily: constantsVals.fmedium}}>{item.quantity}</Text>
                                             </View>}
