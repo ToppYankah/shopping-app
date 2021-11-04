@@ -12,6 +12,7 @@ import mastercard from '../../assets/mastercard.png';
 import visa from '../../assets/visa.png';
 import { useCart } from '../providers/cart';
 
+
 const CheckoutScreen = ({navigation}) => {
     const paymentMethods = [
         {name: "Paypal", source: paypal},
@@ -36,6 +37,7 @@ const CheckoutScreen = ({navigation}) => {
             </View>
 
             <View style={{flex: 1, paddingHorizontal: constantsVals.xpadding}}>
+                {/* Selected Items for checkout */}
                 <View style={styles.sectionBox}>
                     <View style={{flex: 1}}>
                         <Text style={{fontSize: 15, fontFamily: constantsVals.fmedium, marginBottom: 10}}>Selected Items</Text>
@@ -49,6 +51,8 @@ const CheckoutScreen = ({navigation}) => {
                         </ScrollView>
                     </View>
                 </View>
+
+                {/* Delivery method for checkout */}
                 <View style={styles.sectionBox}>
                     <View style={{flex: 1}}>
                         <Text style={{fontSize: 15, fontFamily: constantsVals.fmedium, marginBottom: 10}}>Delivery Method</Text>
@@ -57,6 +61,8 @@ const CheckoutScreen = ({navigation}) => {
                     <IconButton parent={Feather} name="chevron-down" size={20} />
                 </View>
 
+
+                {/* Address for delivery */}
                 <View style={styles.sectionBox}>
                     <View style={{flex: 1}}>
                         <Text style={{fontSize: 15, fontFamily: constantsVals.fmedium, marginBottom: 10}}>Address</Text>
@@ -66,6 +72,8 @@ const CheckoutScreen = ({navigation}) => {
                     <IconButton parent={Feather} name="edit" light={true} color="#000" size={20} />
                 </View>
 
+
+                {/* Payment method for payment */}
                 <View style={{...styles.sectionBox, flexDirection: "column"}}>
                     <Text style={{fontSize: 15, fontFamily: constantsVals.fmedium, marginBottom: 10}}>Payment Method</Text>
                     <View>{paymentMethods.map((m, key)=> 
