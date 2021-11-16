@@ -14,6 +14,7 @@ import LoginScreen from './src/screens/login';
 import { AuthProvider } from './src/providers/auth';
 import SignupScreen from './src/screens/signup';
 import OnboardingScreen from './src/screens/onBoarding';
+import { FavoriteProvider } from './src/providers/favorites';
 
 const Stack = createNativeStackNavigator();
 
@@ -32,17 +33,19 @@ export default function App() {
         <ProductsProvider>
           <OrderProvider>
             <CartProvider>
-              <NavigationContainer >
-                <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="Onboarding">
-                  <Stack.Screen name="Onboarding" component={OnboardingScreen} />
-                  <Stack.Screen name="Login" component={LoginScreen} />
-                  <Stack.Screen name="Signup" component={SignupScreen} />
-                  <Stack.Screen name="Home" component={HomeScreen} />
-                  <Stack.Screen name="SingleProduct" component={SingleProductScreen} />
-                  <Stack.Screen name="Cart" component={CartScreen} />
-                  <Stack.Screen name="Checkout" component={CheckoutScreen} />
-                </Stack.Navigator>
-              </NavigationContainer>
+              <FavoriteProvider>
+                <NavigationContainer >
+                  <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="Onboarding">
+                    <Stack.Screen name="Onboarding" component={OnboardingScreen} />
+                    <Stack.Screen name="Login" component={LoginScreen} />
+                    <Stack.Screen name="Signup" component={SignupScreen} />
+                    <Stack.Screen name="Home" component={HomeScreen} />
+                    <Stack.Screen name="SingleProduct" component={SingleProductScreen} />
+                    <Stack.Screen name="Cart" component={CartScreen} />
+                    <Stack.Screen name="Checkout" component={CheckoutScreen} />
+                  </Stack.Navigator>
+                </NavigationContainer>
+              </FavoriteProvider>
             </CartProvider>
           </OrderProvider>
         </ProductsProvider>
