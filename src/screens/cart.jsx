@@ -1,5 +1,5 @@
-import React from 'react';
-import { Image, ScrollView, Text, TouchableWithoutFeedback, View } from 'react-native';
+import React, {useRef, useState} from 'react';
+import { Dimensions, Animated, Image, ScrollView, Text, TouchableWithoutFeedback, View } from 'react-native';
 import IconButton from '../components/iconButton';
 import { styles } from '../styles/cart';
 import {Feather} from '@expo/vector-icons';
@@ -13,6 +13,7 @@ import { useMemo } from 'react';
 
 const CartScreen = ({navigation}) => {
     const {data} = useCart();
+
     const totalPrice = useMemo(()=>{
         let output = 0;
 
@@ -30,7 +31,9 @@ const CartScreen = ({navigation}) => {
             <View style={styles.header}>
                 <IconButton onPress={navigation.goBack} parent={Feather} name="chevron-left" light={true} size={25} />
                 <Text style={{fontSize: 20, fontFamily: constantsVals.fbold}}>Your Cart</Text>
-                <IconButton parent={Feather} name="trash" size={18} light={true} color={"red"}  />
+                <TouchableWithoutFeedback>
+                    <IconButton parent={Feather} name="user" size={18} light={true} />
+                </TouchableWithoutFeedback>
             </View>
 
             {/* Cart items list */}
@@ -66,24 +69,65 @@ const CartScreen = ({navigation}) => {
 
 const CartItem = ({data}) => {
     const {getProduct} = useProducts();
-    const {updateItem} = useCart();
+    const {updateItem, removeItem} = useCart();
+    const [selected, setSelected] = useState(false);
+
+    const shiftAnim = useRef(new Animated.Value(0)).current;
+
+    const shiftLeft = () => {
+        setSelected(!selected);
+        // Will change fadeAnim value to 1 in 5 seconds
+        if(selected) {
+            shiftBack()
+        }else{
+            Animated.timing(shiftAnim, {
+              toValue: -50,
+              duration: 100,
+              useNativeDriver: true,
+            }).start();
+        }
+      };
+
+    const shiftBack= () => {
+        setSelected(false);
+        // Will change fadeAnim value to 1 in 5 seconds
+        Animated.timing(shiftAnim, {
+          toValue: 0,
+          duration: 100,
+          useNativeDriver: true,
+        }).start();
+    };
+
+    const handleRemoveItem = ()=>{
+        removeItem(data.id);
+        shiftBack();
+    }
 
     return (
-        <View style={styles.cartItemBox}>
-            <TouchableWithoutFeedback onPress={()=> updateItem(data.id, {select: !data.select})}>
-                <View style={styles.checkBox}>
-                    {data.select ? <View style={styles.checkIndicator}/> : <View />}
-                </View>
-            </TouchableWithoutFeedback>
-            <View style={styles.cartItemImageBox}>
-                <Image source={data.product.image} style={{width: 90, height: 90, resizeMode: "contain"}} />
+        <TouchableWithoutFeedback onPress={shiftBack} onLongPress={shiftLeft}>
+            <View style={{backgroundColor: "#000000"+(selected ? "10" : "00"), ...styles.cardItemWrapper}}>
+                <Animated.View style={{...styles.cartItemBox, transform: [{translateX: shiftAnim}]}}>
+                    <TouchableWithoutFeedback onPress={()=> updateItem(data.id, {select: !data.select})}>
+                        <View style={styles.checkBox}>
+                            {data.select ? <View style={styles.checkIndicator}/> : <View />}
+                        </View>
+                    </TouchableWithoutFeedback>
+                    <View style={styles.cartItemImageBox}>
+                        <Image source={data.product.image} style={{width: 90, height: 90, resizeMode: "contain"}} />
+                    </View>
+                    <View style={{flex: 1}}>
+                        <Text style={{fontFamily: constantsVals.fmedium, marginBottom: 10, fontSize: 17}}>{data.product.name}</Text>
+                        <Text style={{fontFamily: constantsVals.fbold, marginBottom: 10, fontSize: 16}}>&cent; {(data.product.price * data.quantity).toFixed(2)}</Text>
+                        <View style={{alignItems: 'flex-start'}}>
+                            <QuantitySelector max={getProduct(data.product.id).stock} initialValue={data.quantity} onChange={(quantity)=> updateItem(data.id, {quantity})} />
+                        </View>
+                    </View>
+                </Animated.View>
+                <Animated.View style={{transform: [{translateX: shiftAnim}]}}>
+                    <IconButton onPress={handleRemoveItem} parent={Feather} name="trash" size={18} light={true} color={"red"} />
+                </Animated.View>
             </View>
-            <View>
-                <Text style={{fontFamily: constantsVals.fmedium, marginBottom: 10, fontSize: 17}}>{data.product.name}</Text>
-                <Text style={{fontFamily: constantsVals.fbold, marginBottom: 10, fontSize: 16}}>&cent; {(data.product.price * data.quantity).toFixed(2)}</Text>
-                <QuantitySelector max={getProduct(data.product.id).stock} initialValue={data.quantity} onChange={(quantity)=> updateItem(data.id, {quantity})} />
-            </View>
-        </View>
+        </TouchableWithoutFeedback>
     );
 }
 
