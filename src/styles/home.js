@@ -15,7 +15,7 @@ const homeStyles = StyleSheet.create({
     },
     headerText: {
         fontFamily: constantsVals.fbold,
-        fontSize: 30,
+        fontSize: 35,
     },
     searchBar: {
         paddingHorizontal: constantsVals.xpadding,
