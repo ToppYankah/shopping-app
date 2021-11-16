@@ -1,19 +1,24 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { View, Text, Image, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import IconButton from "../components/iconButton";
 import { styles } from "../styles/singleProduct";
-import {Feather} from '@expo/vector-icons';
+import {Feather, Foundation} from '@expo/vector-icons';
 import RatingCard from "../components/ratingCard";
 import constantsVals from "../constants";
 import AppButton from "../components/appButton";
 import QuantitySelector from "../components/quantityPicker";
 import ColorPicker from "../components/colorPicker";
 import { useCart } from "../providers/cart";
+import { useFavorite } from "../providers/favorites";
+import { useAuth } from "../providers/auth";
 
 export default function SingleProductScreen({route, navigation}){
     const product = route.params;
     const {addItem} = useCart();
+    const {user} = useAuth();
+    const {data: favorites, addToFavorites, removeFromFavorites} = useFavorite();
+    const isFavorite = useMemo(()=> favorites.includes(product.id), [favorites]);
     const [selectedColor, setSelectedColor] = useState(Object.keys(product.images)[1]);
     const [quantity, setQuantity] = useState(1);
 
@@ -29,6 +34,10 @@ export default function SingleProductScreen({route, navigation}){
         });
 
         navigation.navigate("Cart");
+    }
+
+    const handleFavorite = ()=>{
+        isFavorite ? removeFromFavorites(product.id) : addToFavorites(product.id);
     }
 
     return (
@@ -64,7 +73,12 @@ export default function SingleProductScreen({route, navigation}){
 
                     {/* Favorite & Add to cart section */}
                     <View style={{flex: 1, flexDirection: "row", alignItems: "center"}}>
-                        <IconButton name="heart" size={25} transparent={true} parent={Feather} />
+                        <IconButton size={25}
+                            onPress={user ? handleFavorite : ()=> navigation.navigate("Login")} 
+                            parent={isFavorite ? Foundation : Feather} 
+                            color={isFavorite ? "orange" : "black"} 
+                            transparent={true} name="heart" 
+                        />
                         <View style={{marginRight: 20}}/>
                         <AppButton
                             onPress={handleAddToCart}
