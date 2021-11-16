@@ -4,7 +4,7 @@ const database = {
             id: "e7a8267a8cff28a91d",
             name: "Kenny Junior",
             email: "tppyankah@gmail.com",
-            password: "somemailpassword",
+            password: "somemailpassword",      
         }
     ],
     favorites: {
