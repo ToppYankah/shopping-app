@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { Dimensions, StyleSheet } from "react-native";
 import constantsVals from "../constants";
 
  export const styles = StyleSheet.create({
@@ -35,11 +35,16 @@ import constantsVals from "../constants";
         fontSize: 17,
         fontFamily: constantsVals.fbold
     },
+    cardItemWrapper: {
+        paddingVertical: 10,
+        flexDirection: "row",
+        alignItems: "center"
+    },
     cartItemBox: {
         paddingHorizontal: constantsVals.xpadding,
         flexDirection: "row",
         alignItems: "center",
-        marginBottom: 20
+        minWidth: Dimensions.get("screen").width,
     },
     checkBox: {
         width: 25,
