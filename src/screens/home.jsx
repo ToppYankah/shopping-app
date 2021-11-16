@@ -1,15 +1,16 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useMemo } from 'react';
 import { Animated, ScrollView, Text, Image, TextInput, TouchableWithoutFeedback, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import homeStyles from '../styles/home';
-import {Feather, Foundation} from '@expo/vector-icons';
+import {Feather, Foundation, Ionicons} from '@expo/vector-icons';
 import constantsVals from '../constants';
 import IconButton from '../components/iconButton';
 import RatingCard from '../components/ratingCard';
 import { useProducts } from '../providers/products';
 import logo from '../../assets/logo.png';
 import { useAuth } from '../providers/auth';
+import { useFavorite } from '../providers/favorites';
 
 export default function HomeScreen({navigation}) {
     const categories = [
@@ -47,7 +48,7 @@ export default function HomeScreen({navigation}) {
                 <TextInput placeholder="Search products" style={homeStyles.searchInput}></TextInput>
               </View>
               <View style={homeStyles.searchButton}>
-                <Feather name="box" size={25} color={"#ffffff90"} />
+                <Ionicons name="filter" size={25} color={"#ffffff90"} />
               </View>
           </View>
 
@@ -60,7 +61,10 @@ export default function HomeScreen({navigation}) {
 
           <ScrollView style={{flex: 1}} horizontal={true} showsHorizontalScrollIndicator={false}>
               <View style={{width: 30}}></View>
-              {products.map((product, key)=> <ProductCard key={key} data={product} onPress={()=>navigation.navigate("SingleProduct", product)} />)}
+              {products.map((product, key)=> <ProductCard 
+                onUnauth={()=> navigation.navigate("Login")} key={key} data={product} 
+                onPress={()=>navigation.navigate("SingleProduct", product)} 
+              />)}
               <View style={{width: 10}}></View>
           </ScrollView>
 
@@ -69,11 +73,13 @@ export default function HomeScreen({navigation}) {
   );
 }
 
-const ProductCard = ({data, onPress})=>{
+const ProductCard = ({data, onPress, onUnauth})=>{
+    const {user} = useAuth();
+    const {data: favorites, addToFavorites, removeFromFavorites} = useFavorite();
+    const isFavorite = useMemo(()=> favorites.includes(data.id), [favorites])
     const scaleAnim = useRef(new Animated.Value(1)).current;
 
     const scaleDown = () => {
-        // Will change fadeAnim value to 1 in 5 seconds
         Animated.timing(scaleAnim, {
           toValue: 0.95,
           duration: 200,
@@ -82,13 +88,16 @@ const ProductCard = ({data, onPress})=>{
       };
 
     const scaleUp= () => {
-        // Will change fadeAnim value to 1 in 5 seconds
         Animated.timing(scaleAnim, {
           toValue: 1,
           duration: 200,
           useNativeDriver: true,
         }).start();
     };
+
+    const handleFavorite = ()=>{
+        isFavorite ? removeFromFavorites(data.id) : addToFavorites(data.id);
+    }
 
     return <TouchableWithoutFeedback onPress={onPress} onPressIn={scaleDown} onPressOut={scaleUp}>
         <Animated.View style={{transform: [{scale: scaleAnim}] ,...homeStyles.productCardWrapper}}>
@@ -108,9 +117,14 @@ const ProductCard = ({data, onPress})=>{
             <View style={{flexDirection: "row", alignItems: "center", justifyContent: "space-between"}}>
                 <Text style={{fontWeight: "bold", fontSize: 17}}>&cent; {data.price.toFixed(2)}</Text>
                 <View style={{flexDirection: "row"}}>
-                    <IconButton color="orange" parent={Foundation} transparent={true} name="heart" />
+                    <IconButton 
+                        onPress={user ? handleFavorite : onUnauth} 
+                        parent={isFavorite ? Foundation : Feather} 
+                        color={isFavorite ? "orange" : "black"} 
+                        transparent={true} name="heart" 
+                    />
                     <View style={{width: 10}}></View>
-                    <IconButton parent={Foundation} name="plus" />
+                    <IconButton onPress={user ? ()=>{} : onUnauth} parent={Feather} name="plus" />
                 </View>
             </View>
         </View>
